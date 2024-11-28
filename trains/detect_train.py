@@ -9,25 +9,20 @@ def main():
         model = YOLO("yolo11n.pt")
 
         # Train the model with memory-efficient settings
-        train_results = model.train(
+        model.train(
             data="goboard.yaml",  # path to dataset YAML
             epochs=400,  # number of training epochs
-            imgsz=320,  # reduced image size
+            imgsz=640,  # reduced image size
             device="cuda",  # device to run on
-            batch=-1,  # auto batch size
             workers=min(multiprocessing.cpu_count(), 4),  # limit workers
-            amp=True,  # automatic mixed precision
-            patience=50,  # early stopping patience
-            optimizer='Adam',  # try different optimizer
-            close_mosaic=10,  # disable mosaic augmentation in last 10 epochs
         )
 
         # Additional memory management
         torch.cuda.empty_cache()
 
         # Rest of your code remains the same
-        metrics = model.val()
-        results = model("C:\\Users\\13375\\Desktop\\GO.jpg")
+        model.val()
+        results = model("F:\\Develop\\projects\\go-project\\Step4_processed_img.jpg")
         results[0].show()
 
         path = model.export(format="onnx")
